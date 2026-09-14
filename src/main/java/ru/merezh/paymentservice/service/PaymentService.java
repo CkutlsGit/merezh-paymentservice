@@ -50,7 +50,7 @@ public class PaymentService {
         return paymentCreated.getStatus();
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = {HttpClientErrorException.class, HttpServerErrorException.class})
     public PaymentStatus payOrder(long orderId, long userId) {
         Payment payment = paymentRepository.getPaymentByOrderId(orderId)
                 .orElseThrow(() -> new PaymentException("Заказ не найден" ,HttpStatus.NOT_FOUND));
@@ -71,11 +71,11 @@ public class PaymentService {
         }
         catch (HttpClientErrorException e) {
             payment.setStatus(PaymentStatus.FAILED);
-            throw new HttpClientErrorException(e.getStatusCode() ,e.getMessage());
+            throw e;
         }
         catch (HttpServerErrorException e) {
             payment.setStatus(PaymentStatus.WAITING);
-            throw new HttpServerErrorException(e.getStatusCode(), e.getMessage());
+            throw e;
         }
     }
 
@@ -106,11 +106,11 @@ public class PaymentService {
         }
         catch (HttpClientErrorException e) {
             payment.setStatus(PaymentStatus.FAILED);
-            throw new HttpClientErrorException(e.getStatusCode() ,e.getMessage());
+            throw e;
         }
         catch (HttpServerErrorException e) {
             payment.setStatus(PaymentStatus.WAITING);
-            throw new HttpServerErrorException(e.getStatusCode(), e.getMessage());
+            throw e;
         }
     }
 }
