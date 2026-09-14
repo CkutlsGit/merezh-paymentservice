@@ -22,16 +22,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<ExceptionDto> httpClientErrorExceptionHandler(HttpClientErrorException e) {
+    public ResponseEntity<String> httpClientErrorExceptionHandler(HttpClientErrorException e) {
         log.info("Ошибка класса клиента - {}: {}", e.getClass(), e.getMessage());
 
-        return ResponseEntity.status(e.getStatusCode()).body(new ExceptionDto(e.getMessage()));
+        return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
-    public ResponseEntity<ExceptionDto> httpServerErrorExceptionHandler(HttpServerErrorException e) {
+    public ResponseEntity<String> httpServerErrorExceptionHandler(HttpServerErrorException e) {
         log.info("Ошибка класса сервера - {}: {}", e.getClass(), e.getMessage());
-        return ResponseEntity.status(e.getStatusCode()).body(new ExceptionDto(e.getMessage()));
+        return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
     }
 
     @ExceptionHandler(Exception.class)
