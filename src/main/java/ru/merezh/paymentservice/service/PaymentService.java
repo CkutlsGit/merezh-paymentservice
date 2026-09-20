@@ -10,6 +10,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import ru.merezh.paymentservice.dto.OrderDto;
+import ru.merezh.paymentservice.dto.OrderUpdateDto;
 import ru.merezh.paymentservice.dto.WalletRequestDto;
 import ru.merezh.paymentservice.entity.Payment;
 import ru.merezh.paymentservice.entity.PaymentStatus;
@@ -29,6 +30,9 @@ public class PaymentService {
 
     @Value("${service.wallets.url}")
     private String baseWalletUrl;
+
+    @Value("${service.orders.url}")
+    private String baseOrderUrl;
 
     @Transactional(noRollbackFor = {HttpClientErrorException.class, HttpServerErrorException.class})
     public PaymentStatus placeOrder(OrderDto orderDto) {
@@ -77,6 +81,9 @@ public class PaymentService {
             payment.setStatus(PaymentStatus.WAITING);
             throw e;
         }
+        finally {
+            sendRequestOrder(payment.getOrderId(), payment.getStatus());
+        }
     }
 
     private PaymentStatus sendRequestWallet(WalletRequestDto walletRequestDto) throws HttpClientErrorException, HttpServerErrorException {
@@ -94,6 +101,14 @@ public class PaymentService {
         );
 
         return PaymentStatus.SUCCESS;
+    }
+
+    private void sendRequestOrder(long orderId, PaymentStatus status) {
+        restTemplate.postForObject(
+                baseOrderUrl + "/update",
+                new OrderUpdateDto(orderId, status),
+                String.class
+        );
     }
 
     private PaymentStatus existsOrder(Payment payment) {
