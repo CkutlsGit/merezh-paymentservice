@@ -105,7 +105,7 @@ public class PaymentService {
 
         HttpEntity<BigDecimal> request = new HttpEntity<>(walletRequestDto.totalAmount(), headers);
 
-        ResponseEntity<BigDecimal> response = restTemplate.exchange(
+        restTemplate.exchange(
                 baseWalletUrl + "/balance/sub",
                 HttpMethod.POST,
                 request,
