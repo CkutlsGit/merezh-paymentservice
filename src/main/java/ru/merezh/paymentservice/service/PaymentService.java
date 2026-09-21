@@ -18,6 +18,7 @@ import ru.merezh.paymentservice.exception.PaymentException;
 import ru.merezh.paymentservice.repository.PaymentRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -84,6 +85,17 @@ public class PaymentService {
         finally {
             sendRequestOrder(payment.getOrderId(), payment.getStatus());
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Payment getPayment(long orderId) {
+        return paymentRepository.getPaymentByOrderId(orderId)
+                .orElseThrow(() -> new PaymentException("Заказ не найден", HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Payment> getPaymentsByUserId(long userId) {
+        return paymentRepository.getPaymentByUserId(userId);
     }
 
     private PaymentStatus sendRequestWallet(WalletRequestDto walletRequestDto) throws HttpClientErrorException, HttpServerErrorException {

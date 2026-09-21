@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.merezh.paymentservice.dto.OrderDto;
+import ru.merezh.paymentservice.entity.Payment;
 import ru.merezh.paymentservice.entity.PaymentStatus;
 import ru.merezh.paymentservice.service.PaymentService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -13,6 +16,16 @@ import ru.merezh.paymentservice.service.PaymentService;
 public class PaymentController {
 
     private final PaymentService paymentService;
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Payment> getPayment(@PathVariable long id) {
+        return ResponseEntity.ok().body(paymentService.getPayment(id));
+    }
+
+    @GetMapping("/get/user")
+    public ResponseEntity<List<Payment>> getPaymentsByUserId(@RequestHeader("X-User-Id") long userId) {
+        return ResponseEntity.ok().body(paymentService.getPaymentsByUserId(userId));
+    }
 
     @PostMapping("/place")
     public ResponseEntity<PaymentStatus> placeOrder(@RequestBody OrderDto orderData) {
