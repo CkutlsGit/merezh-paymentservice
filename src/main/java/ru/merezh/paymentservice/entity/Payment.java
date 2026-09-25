@@ -1,14 +1,13 @@
 package ru.merezh.paymentservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "payments")
 @AllArgsConstructor
