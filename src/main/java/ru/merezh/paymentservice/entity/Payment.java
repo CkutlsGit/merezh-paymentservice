@@ -1,5 +1,6 @@
 package ru.merezh.paymentservice.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Table(name = "payments")
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Объект представляющий данные о заказе")
 public class Payment {
 
     @Id
