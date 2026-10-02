@@ -11,6 +11,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import ru.merezh.paymentservice.dto.OrderDto;
 import ru.merezh.paymentservice.dto.OrderUpdateDto;
+import ru.merezh.paymentservice.dto.WalletAmountDto;
 import ru.merezh.paymentservice.dto.WalletRequestDto;
 import ru.merezh.paymentservice.entity.Payment;
 import ru.merezh.paymentservice.entity.PaymentStatus;
@@ -103,7 +104,7 @@ public class PaymentService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("X-User-Id", String.valueOf(walletRequestDto.userId()));
 
-        HttpEntity<BigDecimal> request = new HttpEntity<>(walletRequestDto.totalAmount(), headers);
+        HttpEntity<WalletAmountDto> request = new HttpEntity<>(new WalletAmountDto(walletRequestDto.totalAmount()), headers);
 
         restTemplate.exchange(
                 baseWalletUrl + "/balance/sub",
