@@ -2,7 +2,7 @@
 
 Microservice responsible for processing payments for orders.
 
-📖 In Russian: [перевод на русский](#)
+📖 In Russian: [перевод на русский](https://github.com/CkutlsGit/merezh-paymentservice/blob/main/README.ru.md)
 
 ## 📋 Overview
 
